@@ -3,8 +3,6 @@ import {List, Map} from 'immutable';
 
 describe('immutability', () => {
 
-  // ...
-
   describe('a tree', () => {
 
     function addMovie(currentState, movie) {

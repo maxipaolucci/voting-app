@@ -2,6 +2,7 @@
  * Created by mpaoluc on 31/05/2016.
  */
 import {List, Map} from 'immutable';
+
 export const INITIAL_STATE = Map();
 
 export function setEntries(state, entries) {

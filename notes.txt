@@ -1,0 +1,2 @@
+1) install globally webpack and webpack-dev-server
+>npm install -g webpack webpack-dev-server

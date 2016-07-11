@@ -2,3 +2,4 @@
 .idea/
 .DS_Store
 *.log
+voting-client/dist/bundle.js

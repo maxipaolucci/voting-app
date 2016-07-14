@@ -32,13 +32,17 @@ function getWinners(vote) {
 export function next(state) {
   const entries = state.get('entries')
       .concat(getWinners(state.get('vote')));
+  const nextRound = state.getIn(['vote', 'round'], 0) + 1;
   if (entries.size === 1) {
     return state.remove('vote')
         .remove('entries')
         .set('winner', entries.first());
   } else {
     return state.merge({
-      vote: Map({pair: entries.take(2)}),
+      vote: Map({
+        pair: entries.take(2),
+        round: nextRound
+      }),
       entries: entries.skip(2)
     });
   }

@@ -32,4 +32,46 @@ describe('immutability', () => {
 
   });
 
+  describe('some inmutable functions', () => {
+
+    it('is valid to say with updateIn that', () => {
+      let state = Map({
+        vote : Map({
+          tally : Map()
+        })
+      });
+
+      let nextState = state.updateIn(['vote', 'tally', 'red'], 0, tally => tally + 1);
+
+      expect(nextState).to.equal(Map({
+        vote : Map({
+          tally : Map({
+            red: 1
+          })
+        })
+      }));
+    });
+
+    it('is valid to say with update that', () => {
+      let state = Map({
+        vote : Map({
+          tally : Map({
+            red: 1
+          })
+        })
+      });
+
+      let nextState = state.mergeIn(['vote', 'tally'],
+          state.getIn(['vote', 'tally']).update('red', tally => tally + 1));
+
+      expect(nextState).to.equal(Map({
+        vote : Map({
+          tally : Map({
+            red: 2
+          })
+        })
+      }));
+    });
+  });
+
 });

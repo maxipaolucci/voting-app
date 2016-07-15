@@ -1,27 +1,27 @@
-import {List, Map, fromJS} from 'immutable';
+import {List, Map} from 'immutable';
 
 function setState(state, newState) {
-    const newStateRound = fromJS(newState).getIn(['vote', 'round'], 1);
-    if (state.hasIn(['vote', 'round']) && state.getIn(['vote', 'round']) != newStateRound) {
-        return resetVote(state.merge(newState));
-    } else {
-        return state.merge(newState);
-    }
+    return state.merge(newState);
 }
 
 function vote(state, entry) {
+    const currentRound = state.getIn(['vote', 'round']);
     const currentPair = state.getIn(['vote', 'pair']);
     if (currentPair && currentPair.includes(entry)) {
-        return state.set('hasVoted', entry);
+        return state.set('myVote', Map({
+            round: currentRound,
+            entry
+        }));
     } else {
         return state;
     }
 }
 
 function resetVote(state) {
-    const hasVoted = state.get('hasVoted');
-    if (hasVoted) {
-        return state.remove('hasVoted');
+    const votedForRound = state.getIn(['myVote', 'round']);
+    const currentRound = state.getIn(['vote', 'round']);
+    if (votedForRound !== currentRound) {
+        return state.remove('myVote');
     } else {
         return state;
     }
@@ -30,7 +30,7 @@ function resetVote(state) {
 export default function(state = Map(), action) {
     switch (action.type) {
         case 'SET_STATE':
-            return setState(state, action.state);
+            return resetVote(setState(state, action.state));
         case 'VOTE':
             return vote(state, action.entry);
     }

@@ -8,7 +8,7 @@ describe('reducer', () => {
   it('handle login with valid username', () => {
     const action = {type: 'LOGIN', username: 'maxi'};
     const id = reducer(undefined, action);
-    expect(id).to.equal(1000);
+    expect(id).to.equal(true);
   });
 
   it('handle login with valid username', () => {
@@ -64,14 +64,14 @@ describe('reducer', () => {
       },
       entries: []
     });
-    const action = {type: 'VOTE', entry: 'Trainspotting', voter: 1000};
+    const action = {type: 'VOTE', entry: 'Trainspotting', voter: "maxi"};
     const nextState = reducer(initialState, action);
 
     expect(nextState).to.equal(fromJS({
       vote: {
         pair: ['Trainspotting', '28 Days Later'],
         tally: {Trainspotting: 1},
-        voters: { 1000 : 'Trainspotting'}
+        voters: { "maxi" : 'Trainspotting'}
       },
       entries: []
     }));

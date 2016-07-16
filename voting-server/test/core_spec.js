@@ -1,56 +1,56 @@
 import {List, Map} from 'immutable';
 import {expect} from 'chai';
-import {setEntries, next, vote, getUserId} from '../src/core';
+import {setEntries, next, vote, isValidUser} from '../src/core';
 
 describe('application logic', () => {
 
-  describe('getUserId', () => {
+  describe('isValidUser', () => {
 
     it('the username is maxi', () => {
-      const users = {"maxi" : 1000, "jesi" : 1001};
-      const userId = getUserId(users, 'maxi');
-      expect(userId).to.equal(1000);
+      const users = ["maxi", "jesi"];
+      const userId = isValidUser(users, 'maxi');
+      expect(userId).to.equal(true);
     });
 
     it('the username is undefined', () => {
-      const users = {"maxi" : 1000, "jesi" : 1001};
-      const userId = getUserId(users, undefined);
+      const users = ["maxi", "jesi"];
+      const userId = isValidUser(users, undefined);
       expect(userId).to.equal(false);
     });
 
     it('the username does not exists', () => {
-      const users = {"maxi" : 1000, "jesi" : 1001};
-      const userId = getUserId(users, "juan");
+      const users = ["maxi", "jesi"];
+      const userId = isValidUser(users, "juan");
       expect(userId).to.equal(false);
     });
 
     it('the username is null', () => {
-      const users = {"maxi" : 1000, "jesi" : 1001};
-      const userId = getUserId(users, null);
+      const users = ["maxi", "jesi"];
+      const userId = isValidUser(users, null);
       expect(userId).to.equal(false);
     });
 
     it('the username is numeric', () => {
-      const users = {"maxi" : 1000, "jesi" : 1001};
-      const userId = getUserId(users, 10);
+      const users = ["maxi", "jesi"];
+      const userId = isValidUser(users, 10);
       expect(userId).to.equal(false);
     });
 
     it('the users is undefined', () => {
-      const userId = getUserId(undefined, 'maxi');
+      const userId = isValidUser(undefined, 'maxi');
       expect(userId).to.equal(false);
     });
 
     it('the users is empty', () => {
-      const users = {};
-      const userId = getUserId(users, 'maxi');
+      const users = [];
+      const userId = isValidUser(users, 'maxi');
       expect(userId).to.equal(false);
     });
 
     it('the users is an inmutable', () => {
-      const users = Map({"maxi" : 1000, "jesi" : 1001});
-      const userId = getUserId(users, "jesi");
-      expect(userId).to.equal(1001);
+      const users = List.of("maxi", "jesi");
+      const userId = isValidUser(users, "jesi");
+      expect(userId).to.equal(true);
     });
   });
 
@@ -92,12 +92,12 @@ describe('application logic', () => {
             '28 Days Later': 2
           }),
           voters: Map({
-            1000: 'Trainspotting',
-            1001: 'Trainspotting',
-            1002: 'Trainspotting',
-            1003: 'Trainspotting',
-            1004: '28 Days Later',
-            1005: '28 Days Later',
+            "maxi": 'Trainspotting',
+            "jesi": 'Trainspotting',
+            "juan": 'Trainspotting',
+            "fefi": 'Trainspotting',
+            "pepe": '28 Days Later',
+            "tito": '28 Days Later'
           }),
           round: 2
         }),
@@ -122,12 +122,12 @@ describe('application logic', () => {
             '28 Days Later': 3
           }),
           voters: Map({
-            1000: 'Trainspotting',
-            1001: 'Trainspotting',
-            1002: '28 Days Later',
-            1003: 'Trainspotting',
-            1004: '28 Days Later',
-            1005: '28 Days Later',
+            "maxi": 'Trainspotting',
+            "jesi": 'Trainspotting',
+            "juan": 'Trainspotting',
+            "fefi": '28 Days Later',
+            "pepe": '28 Days Later',
+            "tito": '28 Days Later'
           }),
           round: 1
         }),
@@ -152,12 +152,12 @@ describe('application logic', () => {
             '28 Days Later': 2
           }),
           voters: Map({
-            1000: 'Trainspotting',
-            1001: 'Trainspotting',
-            1002: 'Trainspotting',
-            1003: 'Trainspotting',
-            1004: '28 Days Later',
-            1005: '28 Days Later',
+            "maxi": 'Trainspotting',
+            "jesi": 'Trainspotting',
+            "juan": 'Trainspotting',
+            "fefi": 'Trainspotting',
+            "pepe": '28 Days Later',
+            "tito": '28 Days Later'
           }),
           round: 4
         }),
@@ -177,14 +177,14 @@ describe('application logic', () => {
       const state = Map({
         pair: List.of('Trainspotting', '28 Days Later')
       });
-      const nextState = vote(state, 'Trainspotting', 1000);
+      const nextState = vote(state, 'Trainspotting', "maxi");
       expect(nextState).to.equal(Map({
         pair: List.of('Trainspotting', '28 Days Later'),
         tally: Map({
           'Trainspotting': 1
         }),
         voters: Map({
-          1000: 'Trainspotting'
+          "maxi": 'Trainspotting'
         })
       }));
     });
@@ -197,14 +197,14 @@ describe('application logic', () => {
           '28 Days Later': 2
         }),
         voters: Map({
-          1000: 'Trainspotting',
-          1001: 'Trainspotting',
-          1002: 'Trainspotting',
-          1004: '28 Days Later',
-          1005: '28 Days Later',
+          "maxi": 'Trainspotting',
+          "jesi": 'Trainspotting',
+          "juan": 'Trainspotting',
+          "pepe": '28 Days Later',
+          "tito": '28 Days Later'
         })
       });
-      const nextState = vote(state, 'Trainspotting', 1003);
+      const nextState = vote(state, 'Trainspotting', "fefi");
       expect(nextState).to.equal(Map({
         pair: List.of('Trainspotting', '28 Days Later'),
         tally: Map({
@@ -212,12 +212,12 @@ describe('application logic', () => {
           '28 Days Later': 2
         }),
         voters: Map({
-          1000: 'Trainspotting',
-          1001: 'Trainspotting',
-          1002: 'Trainspotting',
-          1003: 'Trainspotting',
-          1004: '28 Days Later',
-          1005: '28 Days Later',
+          "maxi": 'Trainspotting',
+          "jesi": 'Trainspotting',
+          "juan": 'Trainspotting',
+          "pepe": '28 Days Later',
+          "tito": '28 Days Later',
+          "fefi": 'Trainspotting'
         })
       }));
     });

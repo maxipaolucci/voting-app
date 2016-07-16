@@ -1,9 +1,16 @@
 /**
  * Created by mpaoluc on 31/05/2016.
  */
-import {List, Map} from 'immutable';
+import {List, Map, fromJS} from 'immutable';
 
 export const INITIAL_STATE = Map();
+
+export function getUserId(users, username) {
+  if (!users) {
+    return false;
+  }
+  return fromJS(users).get(username, false);
+}
 
 export function setEntries(state, entries) {
   return state.set('entries', List(entries));
@@ -48,10 +55,12 @@ export function next(state) {
   }
 }
 
-export function vote(voteState, entry) {
+export function vote(voteState, entry, voter) {
   const currentPair = voteState.getIn(['pair']);
   if (currentPair && currentPair.includes(entry)) {
-    return voteState.updateIn(
+    let newVoteState = voteState.updateIn(['voters', `${voter}`], '', value => entry);
+
+    return newVoteState.updateIn(
       ['tally', entry],
       0,
       tally => tally + 1

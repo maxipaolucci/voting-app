@@ -5,6 +5,24 @@ import reducer from '../src/reducer';
 
 describe('reducer', () => {
 
+  it('handle login with valid username', () => {
+    const action = {type: 'LOGIN', username: 'maxi'};
+    const id = reducer(undefined, action);
+    expect(id).to.equal(1000);
+  });
+
+  it('handle login with valid username', () => {
+    const action = {type: 'LOGIN', username: 'pepe'};
+    const id = reducer(undefined, action);
+    expect(id).to.equal(false);
+  });
+
+  it('handle login with valid username', () => {
+    const action = {type: 'LOGIN', username: undefined};
+    const id = reducer(undefined, action);
+    expect(id).to.equal(false);
+  });
+
   it('has an initial state', () => {
     const action = {type: 'SET_ENTRIES', entries: ['Trainspotting']};
     const nextState = reducer(undefined, action);
@@ -46,13 +64,14 @@ describe('reducer', () => {
       },
       entries: []
     });
-    const action = {type: 'VOTE', entry: 'Trainspotting'};
+    const action = {type: 'VOTE', entry: 'Trainspotting', voter: 1000};
     const nextState = reducer(initialState, action);
 
     expect(nextState).to.equal(fromJS({
       vote: {
         pair: ['Trainspotting', '28 Days Later'],
-        tally: {Trainspotting: 1}
+        tally: {Trainspotting: 1},
+        voters: { 1000 : 'Trainspotting'}
       },
       entries: []
     }));
@@ -80,9 +99,9 @@ describe('reducer', () => {
     const actions = [
       {type: 'SET_ENTRIES', entries: ['Trainspotting', '28 Days Later']},
       {type: 'NEXT'},
-      {type: 'VOTE', entry: 'Trainspotting'},
-      {type: 'VOTE', entry: '28 Days Later'},
-      {type: 'VOTE', entry: 'Trainspotting'},
+      {type: 'VOTE', entry: 'Trainspotting', voter: 1000},
+      {type: 'VOTE', entry: '28 Days Later', voter: 1000},
+      {type: 'VOTE', entry: 'Trainspotting', voter: 1000},
       {type: 'NEXT'}
     ];
     const finalState = actions.reduce(reducer, Map());

@@ -17,10 +17,6 @@ export const currentUser = 'maxi';
 
 const socket = io(`${location.protocol}//${location.hostname}:8090`);
 
-socket.on('state', state =>
-  store.dispatch(setState(state))
-);
-
 const createStoreWithMiddleware = compose(
   applyMiddleware(
     remoteActionMiddleware(socket)
@@ -29,7 +25,9 @@ const createStoreWithMiddleware = compose(
 )(createStore);
 const store = createStoreWithMiddleware(reducer);
 
-
+socket.on('state', state =>
+  store.dispatch(setState(state))
+);
 
 const routes = <Route component={App}>
     <Route path="/results" component={ResultsContainer} />

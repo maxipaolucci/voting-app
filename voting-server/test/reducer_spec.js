@@ -5,24 +5,6 @@ import reducer from '../src/reducer';
 
 describe('reducer', () => {
 
-  it('handle login with valid username', () => {
-    const action = {type: 'LOGIN', username: 'maxi'};
-    const id = reducer(undefined, action);
-    expect(id).to.equal(true);
-  });
-
-  it('handle login with valid username', () => {
-    const action = {type: 'LOGIN', username: 'pepe'};
-    const id = reducer(undefined, action);
-    expect(id).to.equal(false);
-  });
-
-  it('handle login with valid username', () => {
-    const action = {type: 'LOGIN', username: undefined};
-    const id = reducer(undefined, action);
-    expect(id).to.equal(false);
-  });
-
   it('has an initial state', () => {
     const action = {type: 'SET_ENTRIES', entries: ['Trainspotting']};
     const nextState = reducer(undefined, action);
@@ -50,8 +32,7 @@ describe('reducer', () => {
 
     expect(nextState).to.equal(fromJS({
       vote: {
-        pair: ['Trainspotting', '28 Days Later'],
-        round: 1
+        pair: ['Trainspotting', '28 Days Later']
       },
       entries: []
     }));
@@ -77,6 +58,42 @@ describe('reducer', () => {
     }));
   });
 
+  it('handles VOTE with invalid user', () => {
+    const initialState = fromJS({
+      vote: {
+        pair: ['Trainspotting', '28 Days Later']
+      },
+      entries: []
+    });
+    const action = {type: 'VOTE', entry: 'Trainspotting', voter: "beto"};
+    const nextState = reducer(initialState, action);
+
+    expect(nextState).to.equal(fromJS({
+      vote: {
+        pair: ['Trainspotting', '28 Days Later'],
+      },
+      entries: []
+    }));
+  });
+
+  it('handles VOTE with undefined user', () => {
+    const initialState = fromJS({
+      vote: {
+        pair: ['Trainspotting', '28 Days Later']
+      },
+      entries: []
+    });
+    const action = {type: 'VOTE', entry: 'Trainspotting', voter: undefined};
+    const nextState = reducer(initialState, action);
+
+    expect(nextState).to.equal(fromJS({
+      vote: {
+        pair: ['Trainspotting', '28 Days Later'],
+      },
+      entries: []
+    }));
+  });
+
   it('vote a movie not in the pair does not make any change in the state', () => {
     const initialState = fromJS({
       vote: {
@@ -84,7 +101,7 @@ describe('reducer', () => {
       },
       entries: []
     });
-    const action = {type: 'VOTE', entry: 'The beach'};
+    const action = {type: 'VOTE', entry: 'The beach', voter: 'maxi'};
     const nextState = reducer(initialState, action);
 
     expect(nextState).to.equal(fromJS({
@@ -99,9 +116,9 @@ describe('reducer', () => {
     const actions = [
       {type: 'SET_ENTRIES', entries: ['Trainspotting', '28 Days Later']},
       {type: 'NEXT'},
-      {type: 'VOTE', entry: 'Trainspotting', voter: 1000},
-      {type: 'VOTE', entry: '28 Days Later', voter: 1000},
-      {type: 'VOTE', entry: 'Trainspotting', voter: 1000},
+      {type: 'VOTE', entry: 'Trainspotting', voter: 'maxi'},
+      {type: 'VOTE', entry: '28 Days Later', voter: 'jesi'},
+      {type: 'VOTE', entry: 'Trainspotting', voter: 'juan'},
       {type: 'NEXT'}
     ];
     const finalState = actions.reduce(reducer, Map());

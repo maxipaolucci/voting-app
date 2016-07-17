@@ -6,7 +6,7 @@ import data from './data';
 
 export const INITIAL_STATE = Map();
 
-export function isValidUser(users, username) {
+export function isValidUser(username, users = data.users) {
   if (!users || !username) {
     return false;
   }
@@ -48,8 +48,7 @@ export function next(state) {
   } else {
     return state.merge({
       vote: Map({
-        pair: entries.take(2),
-        round: state.getIn(['vote', 'round'], 0) + 1
+        pair: entries.take(2)
       }),
       entries: entries.skip(2)
     });
@@ -57,8 +56,11 @@ export function next(state) {
 }
 
 export function vote(voteState, entry, voter) {
+  if (!voter || !isValidUser(voter)) {
+    return voteState;
+  }
+
   const currentPair = voteState.getIn(['pair']);
-  //const validUser =
 
   if (currentPair && currentPair.includes(entry)) {
     let newVoteState = voteState.updateIn(['voters', voter], '', value => entry);

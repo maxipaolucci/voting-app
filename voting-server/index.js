@@ -1,9 +1,5 @@
 import makeStore from './src/store';
 import startServer from './src/server';
-import data from './src/data';
-
-//load users
-console.log(data.users);
 
 export const store = makeStore();
 startServer(store);

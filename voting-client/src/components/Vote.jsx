@@ -1,5 +1,6 @@
 import React from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
+import {currentUser} from '../index';
 
 export default React.createClass({
     mixins: [PureRenderMixin],
@@ -18,7 +19,7 @@ export default React.createClass({
                 <button className={this.hasVotedFor(entry) ? 'voted' : ''}
                         key={entry}
                         disabled={this.isDisabled()}
-                        onClick={() => this.props.vote(entry)}>
+                        onClick={() => this.props.vote(entry, currentUser)}>
                     <h1>{entry}</h1>
                     {this.hasVotedFor(entry) ?
                         <div className="label">Voted</div> :

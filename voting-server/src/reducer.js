@@ -1,4 +1,4 @@
-import {setEntries, next, vote, isValidUser, INITIAL_STATE} from './core';
+import {setEntries, next, vote, INITIAL_STATE} from './core';
 
 export default function reducer(state = INITIAL_STATE, action) {
   switch (action.type) {
@@ -8,9 +8,6 @@ export default function reducer(state = INITIAL_STATE, action) {
       return next(state);
     case 'VOTE':
       return state.update('vote', voteState => vote(voteState, action.entry, action.voter));
-    case 'LOGIN':
-      const users = require('../users.json');
-      return isValidUser(users, action.username);
   }
   return state;
 }

@@ -8,48 +8,48 @@ describe('application logic', () => {
 
     it('the username is maxi', () => {
       const users = ["maxi", "jesi"];
-      const userId = isValidUser(users, 'maxi');
+      const userId = isValidUser('maxi', users);
       expect(userId).to.equal(true);
     });
 
     it('the username is undefined', () => {
       const users = ["maxi", "jesi"];
-      const userId = isValidUser(users, undefined);
+      const userId = isValidUser(undefined, users);
       expect(userId).to.equal(false);
     });
 
     it('the username does not exists', () => {
       const users = ["maxi", "jesi"];
-      const userId = isValidUser(users, "juan");
+      const userId = isValidUser("juan", users);
       expect(userId).to.equal(false);
     });
 
     it('the username is null', () => {
       const users = ["maxi", "jesi"];
-      const userId = isValidUser(users, null);
+      const userId = isValidUser(null, users);
       expect(userId).to.equal(false);
     });
 
     it('the username is numeric', () => {
       const users = ["maxi", "jesi"];
-      const userId = isValidUser(users, 10);
-      expect(userId).to.equal(false);
-    });
-
-    it('the users is undefined', () => {
-      const userId = isValidUser(undefined, 'maxi');
+      const userId = isValidUser(10, users);
       expect(userId).to.equal(false);
     });
 
     it('the users is empty', () => {
       const users = [];
-      const userId = isValidUser(users, 'maxi');
+      const userId = isValidUser('maxi', users);
       expect(userId).to.equal(false);
     });
 
     it('the users is an inmutable', () => {
       const users = List.of("maxi", "jesi");
-      const userId = isValidUser(users, "jesi");
+      const userId = isValidUser("jesi", users);
+      expect(userId).to.equal(true);
+    });
+
+    it('load users data by default', () => {
+      const userId = isValidUser("jesi");
       expect(userId).to.equal(true);
     });
   });
@@ -76,8 +76,7 @@ describe('application logic', () => {
       const nextState = next(state);
       expect(nextState).to.equal(Map({
         vote: Map({
-          pair: List.of('Trainspotting', '28 Days Later'),
-          round: 1
+          pair: List.of('Trainspotting', '28 Days Later')
         }),
         entries: List.of('Sunshine')
       }));
@@ -98,16 +97,14 @@ describe('application logic', () => {
             "fefi": 'Trainspotting',
             "pepe": '28 Days Later',
             "tito": '28 Days Later'
-          }),
-          round: 2
+          })
         }),
         entries: List.of('Sunshine', 'Millions', '127 Hours')
       });
       const nextState = next(state);
       expect(nextState).to.equal(Map({
         vote: Map({
-          pair: List.of('Sunshine', 'Millions'),
-          round: 3
+          pair: List.of('Sunshine', 'Millions')
         }),
         entries: List.of('127 Hours', 'Trainspotting')
       }));
@@ -128,16 +125,14 @@ describe('application logic', () => {
             "fefi": '28 Days Later',
             "pepe": '28 Days Later',
             "tito": '28 Days Later'
-          }),
-          round: 1
+          })
         }),
         entries: List.of('Sunshine', 'Millions', '127 Hours')
       });
       const nextState = next(state);
       expect(nextState).to.equal(Map({
         vote: Map({
-          pair: List.of('Sunshine', 'Millions'),
-          round: 2
+          pair: List.of('Sunshine', 'Millions')
         }),
         entries: List.of('127 Hours', 'Trainspotting', '28 Days Later')
       }));

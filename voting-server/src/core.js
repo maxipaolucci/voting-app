@@ -63,8 +63,27 @@ export function vote(voteState, entry, voter) {
   const currentPair = voteState.getIn(['pair']);
 
   if (currentPair && currentPair.includes(entry)) {
-    let newVoteState = voteState.updateIn(['voters', voter], '', value => entry);
 
+
+    //get if exists a vote from the same voter in the voters prop. If exists means that this user already voted before
+    const previousVoteEntry = voteState.getIn(['voters', voter]);
+
+    //create a new vote state object cloning the voteState from params
+    let newVoteState = voteState.merge(Map());
+
+    if (previousVoteEntry) {
+      //if the voter already voted in this pair then we remove the old vote from the tally counting
+      newVoteState = newVoteState.updateIn(
+        ['tally', previousVoteEntry],
+        0,
+        tally => tally - 1
+      );
+    }
+
+    //update the voters prop with the current entry for the current voter
+    newVoteState = newVoteState.updateIn(['voters', voter], '', value => entry);
+
+    //finally adding a tally for the current entry
     return newVoteState.updateIn(
       ['tally', entry],
       0,

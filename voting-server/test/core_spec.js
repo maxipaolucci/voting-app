@@ -2,9 +2,9 @@ import {List, Map} from 'immutable';
 import {expect} from 'chai';
 import {setEntries, next, vote, isValidUser} from '../src/core';
 
-describe('application logic', () => {
+describe('Application logic >', () => {
 
-  describe('isValidUser', () => {
+  describe('isValidUser >', () => {
 
     it('the username is maxi', () => {
       const users = ["maxi", "jesi"];
@@ -54,7 +54,7 @@ describe('application logic', () => {
     });
   });
 
-  describe('setEntries', () => {
+  describe('setEntries >', () => {
 
     it('converts to immutable', () => {
       const state = Map();
@@ -67,7 +67,7 @@ describe('application logic', () => {
 
   });
 
-  describe('next', () => {
+  describe('next >', () => {
 
     it('takes the next two entries under vote', () => {
       const state = Map({
@@ -166,9 +166,9 @@ describe('application logic', () => {
 
   });
 
-  describe('vote', () => {
+  describe('vote >', () => {
 
-    it('creates a tally for the voted entry', () => {
+    it('creates a tally and voters for the voted entry', () => {
       const state = Map({
         pair: List.of('Trainspotting', '28 Days Later')
       });
@@ -184,7 +184,7 @@ describe('application logic', () => {
       }));
     });
 
-    it('adds to existing tally for the voted entry', () => {
+    it('adds to existing tally and voters a new vote entry from a new voter', () => {
       const state = Map({
         pair: List.of('Trainspotting', '28 Days Later'),
         tally: Map({
@@ -213,6 +213,71 @@ describe('application logic', () => {
           "pepe": '28 Days Later',
           "tito": '28 Days Later',
           "fefi": 'Trainspotting'
+        })
+      }));
+    });
+
+    it('change the option voted before by a voter with a different selection. ' +
+      'This decrement the old tally entry by 1 and increments the new one as well as update the voters prop', () => {
+      const state = Map({
+        pair: List.of('Trainspotting', '28 Days Later'),
+        tally: Map({
+          'Trainspotting': 3,
+          '28 Days Later': 2
+        }),
+        voters: Map({
+          "maxi": 'Trainspotting',
+          "jesi": 'Trainspotting',
+          "juan": 'Trainspotting',
+          "pepe": '28 Days Later',
+          "tito": '28 Days Later'
+        })
+      });
+      const nextState = vote(state, '28 Days Later', "maxi");
+      expect(nextState).to.equal(Map({
+        pair: List.of('Trainspotting', '28 Days Later'),
+        tally: Map({
+          'Trainspotting': 2,
+          '28 Days Later': 3
+        }),
+        voters: Map({
+          "maxi": '28 Days Later',
+          "jesi": 'Trainspotting',
+          "juan": 'Trainspotting',
+          "pepe": '28 Days Later',
+          "tito": '28 Days Later'
+        })
+      }));
+    });
+
+    it('keep the same state when a voter votes again for the same option in the current pair', () => {
+      const state = Map({
+        pair: List.of('Trainspotting', '28 Days Later'),
+        tally: Map({
+          'Trainspotting': 3,
+          '28 Days Later': 2
+        }),
+        voters: Map({
+          "maxi": 'Trainspotting',
+          "jesi": 'Trainspotting',
+          "juan": 'Trainspotting',
+          "pepe": '28 Days Later',
+          "tito": '28 Days Later'
+        })
+      });
+      const nextState = vote(state, 'Trainspotting', "maxi");
+      expect(nextState).to.equal(Map({
+        pair: List.of('Trainspotting', '28 Days Later'),
+        tally: Map({
+          'Trainspotting': 3,
+          '28 Days Later': 2
+        }),
+        voters: Map({
+          "maxi": 'Trainspotting',
+          "jesi": 'Trainspotting',
+          "juan": 'Trainspotting',
+          "pepe": '28 Days Later',
+          "tito": '28 Days Later'
         })
       }));
     });

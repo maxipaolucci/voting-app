@@ -13,8 +13,6 @@ import App from './components/App';
 import {VotingContainer} from './components/Voting';
 import {ResultsContainer} from './components/Results';
 
-export const currentUser = 'maxi';
-
 const socket = io(`${location.protocol}//${location.hostname}:8090`);
 
 const createStoreWithMiddleware = compose(

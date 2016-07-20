@@ -4,24 +4,32 @@ import {connect} from 'react-redux';
 import Winner from './Winner';
 import Vote from './Vote';
 import * as actionCreators from '../action_creators';
-import {currentUser} from '../user';
 
 export const Voting = React.createClass({
   mixins: [PureRenderMixin],
+  contextTypes: {
+    router: React.PropTypes.object
+  },
   render: function() {
-    return <div>
-      {this.props.winner ?
-          <Winner ref="winner" winner={this.props.winner} /> :
-          <Vote {...this.props} />}
-    </div>;
+    if (!this.props.currentUser) {
+      //if the user is not set then redirect to login
+      this.context.router.push('/login');
+      return null;
+    } else {
+      return <div>
+        { this.props.winner ?
+          <Winner ref="winner" winner={this.props.winner}/> : <Vote {...this.props} /> }
+      </div>;
+    }
   }
 });
 
 function mapStateToProps(state) {
   return {
     pair: state.getIn(['vote', 'pair']),
-    hasVoted: state.getIn(['vote', 'voters', currentUser], false),
-    winner: state.get('winner')
+    hasVoted: state.getIn(['vote', 'voters', state.get('currentUser')], false),
+    winner: state.get('winner'),
+    currentUser: state.get('currentUser')
   };
 }
 

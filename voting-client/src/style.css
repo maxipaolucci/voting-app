@@ -4,6 +4,11 @@ body {
     color: white;
 }
 
+
+input {
+    color: #673AB7;
+    font-weight: bold;
+}
 /* Voting Screen */
 
 .voting {

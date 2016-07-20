@@ -5,6 +5,13 @@ export function setState(state) {
     };
 }
 
+export function setCurrentUser(currentUser) {
+    return {
+        type: 'SET_CURRENT_USER',
+        currentUser
+    };
+}
+
 export function vote(entry, voter) {
     return {
         meta: {remote: true},

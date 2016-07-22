@@ -4,6 +4,30 @@ body {
     color: white;
 }
 
+div.login-form {
+}
+
+div.login-form form {
+    text-align: center;
+
+}
+
+div.login-form form input {
+    margin-right: 10px;
+    height: 50px;
+    width: 300px;
+}
+
+div.login-form form button {
+    height: 50px;
+    color: #673AB7;
+}
+
+label.error {
+    color: #fc8c84;
+    display: block;
+    margin-bottom: 5px;
+}
 
 input {
     color: #673AB7;

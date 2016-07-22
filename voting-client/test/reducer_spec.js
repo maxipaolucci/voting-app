@@ -85,4 +85,23 @@ describe('reducer', () => {
         }));
     });
 
+    it('handles SET_CURRENT_USER by returning a state with the current user set', () => {
+        const state = fromJS({
+            vote: {
+                pair: ['Trainspotting', '28 Days Later'],
+                tally: {Trainspotting: 1}
+            }
+        });
+        const action = {type: 'SET_CURRENT_USER', currentUser: 'maxi'};
+        const nextState = reducer(state, action);
+
+        expect(nextState).to.equal(fromJS({
+            vote: {
+                pair: ['Trainspotting', '28 Days Later'],
+                tally: {Trainspotting: 1}
+            },
+            currentUser: 'maxi'
+        }));
+    });
+
 });

@@ -11,7 +11,7 @@ export const Voting = React.createClass({
     router: React.PropTypes.object
   },
   render: function() {
-    if (!this.props.currentUser) {
+    if (!this.props.currentUser || this.props.currentUser == '-1') {
       //if the user is not set then redirect to login
       this.context.router.push('/login');
       return null;

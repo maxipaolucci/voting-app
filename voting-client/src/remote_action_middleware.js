@@ -4,11 +4,12 @@ export default socket => store => next => action => {
 
   if (action.type === 'SET_CURRENT_USER') {
     socket.on('validUser', (username) => {
-      if (username) {
-        console.log(`valid username; ${username}`);
-        return next(action);
+      if (!username) {
+        action.currentUser = '-1';
+        console.log(`invalid username; ${username}`);
       }
-      console.log(`invalid username; ${username}`);
+      return next(action);
+
     });
     socket.emit('validateUser', action.currentUser);
 

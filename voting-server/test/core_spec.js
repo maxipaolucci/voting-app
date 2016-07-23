@@ -1,6 +1,6 @@
 import {List, Map} from 'immutable';
 import {expect} from 'chai';
-import {setEntries, next, vote, isValidUser} from '../src/core';
+import {setEntries, next, vote, isValidUser, restart} from '../src/core';
 
 describe('Application logic >', () => {
 
@@ -61,7 +61,8 @@ describe('Application logic >', () => {
       const entries = ['Trainspotting', '28 Days Later'];
       const nextState = setEntries(state, entries);
       expect(nextState).to.equal(Map({
-        entries: List.of('Trainspotting', '28 Days Later')
+        entries: List.of('Trainspotting', '28 Days Later'),
+        originalEntries: List.of('Trainspotting', '28 Days Later')
       }));
     });
 
@@ -282,5 +283,37 @@ describe('Application logic >', () => {
       }));
     });
 
+  });
+
+  describe('restart >', () => {
+
+    it('restart the app', () => {
+      const state = Map({
+        vote: Map({
+          pair: List.of('Trainspotting', '28 Days Later'),
+          tally: Map({
+            'Trainspotting': 3,
+            '28 Days Later': 2
+          }),
+          voters: Map({
+            "maxi": 'Trainspotting',
+            "jesi": 'Trainspotting',
+            "juan": 'Trainspotting',
+            "pepe": '28 Days Later',
+            "tito": '28 Days Later'
+          })
+        }),
+        entries: List(),
+        originalEntries: List.of('Trainspotting', '28 Days Later', 'Steve Jobs')
+      });
+      const nextState = restart(state);
+      expect(nextState).to.equal(Map({
+        vote: Map({
+          pair: List.of('Trainspotting', '28 Days Later')
+        }),
+        entries: List.of('Steve Jobs'),
+        originalEntries: List.of('Trainspotting', '28 Days Later', 'Steve Jobs')
+      }));
+    });
   });
 });

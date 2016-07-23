@@ -14,7 +14,8 @@ export function isValidUser(username, users = data.users) {
 }
 
 export function setEntries(state, entries) {
-  return state.set('entries', List(entries));
+  return state.set('entries', List(entries))
+    .set('originalEntries', List(entries));
 }
 
 function getWinners(vote) {
@@ -93,4 +94,12 @@ export function vote(voteState, entry, voter) {
     return voteState;
   }
 
+}
+
+export function restart(state) {
+  state = state.remove('vote')
+    .remove('entries');
+
+  state = setEntries(state, state.get('originalEntries'));
+  return next(state);
 }

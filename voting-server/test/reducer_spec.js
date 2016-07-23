@@ -9,7 +9,8 @@ describe('reducer', () => {
     const action = {type: 'SET_ENTRIES', entries: ['Trainspotting']};
     const nextState = reducer(undefined, action);
     expect(nextState).to.equal(fromJS({
-      entries: ['Trainspotting']
+      entries: ['Trainspotting'],
+      originalEntries: ['Trainspotting']
     }));
   });
 
@@ -19,13 +20,15 @@ describe('reducer', () => {
     const nextState = reducer(initialState, action);
 
     expect(nextState).to.equal(fromJS({
-      entries: ['Trainspotting']
+      entries: ['Trainspotting'],
+      originalEntries: ['Trainspotting']
     }));
   });
 
   it('handles NEXT', () => {
     const initialState = fromJS({
-      entries: ['Trainspotting', '28 Days Later']
+      entries: ['Trainspotting', '28 Days Later'],
+      originalEntries: ['Trainspotting', '28 Days Later']
     });
     const action = {type: 'NEXT'};
     const nextState = reducer(initialState, action);
@@ -34,7 +37,8 @@ describe('reducer', () => {
       vote: {
         pair: ['Trainspotting', '28 Days Later']
       },
-      entries: []
+      entries: [],
+      originalEntries: ['Trainspotting', '28 Days Later']
     }));
   });
 
@@ -112,6 +116,26 @@ describe('reducer', () => {
     }));
   });
 
+  it('handles restart in the middle of a votation', () => {
+    const initialState = fromJS({
+      vote: {
+        pair: ['Trainspotting', '28 Days Later']
+      },
+      entries: [],
+      originalEntries: ['Trainspotting', '28 Days Later', 'Steve Jobs']
+    });
+    const action = {type: 'RESTART'};
+    const nextState = reducer(initialState, action);
+
+    expect(nextState).to.equal(fromJS({
+      vote: {
+        pair: ['Trainspotting', '28 Days Later']
+      },
+      entries: ['Steve Jobs'],
+      originalEntries: ['Trainspotting', '28 Days Later', 'Steve Jobs']
+    }));
+  });
+
   it('can be used with reduce', () => {
     const actions = [
       {type: 'SET_ENTRIES', entries: ['Trainspotting', '28 Days Later']},
@@ -124,6 +148,7 @@ describe('reducer', () => {
     const finalState = actions.reduce(reducer, Map());
 
     expect(finalState).to.equal(fromJS({
+      originalEntries: [ "Trainspotting", "28 Days Later" ],
       winner: 'Trainspotting'
     }));
   });

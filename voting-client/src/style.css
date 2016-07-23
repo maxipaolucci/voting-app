@@ -140,8 +140,13 @@ input {
     background-color: black;
     color: #aaa;
 }
-.results .management .next {
+.results .management .next, .results .management .restart {
     flex: 1;
+}
+
+.results .management .restart {
+    background-color: deeppink;
+    color: #fff;
 }
 
 /* Winner View */

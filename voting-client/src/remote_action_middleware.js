@@ -1,4 +1,3 @@
-import {browserHistory} from 'react-router';
 
 export default socket => store => next => action => {
 

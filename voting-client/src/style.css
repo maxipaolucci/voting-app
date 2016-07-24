@@ -128,23 +128,23 @@ input {
     font-size: 2rem;
 }
 
-.results .management {
+.management {
     display: flex;
-
+    font-size: 12pt;
     height: 2em;
     border-top: 1px solid #aaa;
 }
 
-.results .management button {
+.management button {
     border: 0;
     background-color: black;
     color: #aaa;
 }
-.results .management .next, .results .management .restart {
+.management .next, .management .restart {
     flex: 1;
 }
 
-.results .management .restart {
+.management .restart {
     background-color: deeppink;
     color: #fff;
 }

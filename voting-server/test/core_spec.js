@@ -315,5 +315,20 @@ describe('Application logic >', () => {
         originalEntries: List.of('Trainspotting', '28 Days Later', 'Steve Jobs')
       }));
     });
+
+    it('restart the app when we have a winner', () => {
+      const state = Map({
+        winner: 'Trainspotting',
+        originalEntries: List.of('Trainspotting', '28 Days Later', 'Steve Jobs')
+      });
+      const nextState = restart(state);
+      expect(nextState).to.equal(Map({
+        vote: Map({
+          pair: List.of('Trainspotting', '28 Days Later')
+        }),
+        entries: List.of('Steve Jobs'),
+        originalEntries: List.of('Trainspotting', '28 Days Later', 'Steve Jobs')
+      }));
+    });
   });
 });

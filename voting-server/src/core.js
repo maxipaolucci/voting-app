@@ -98,7 +98,8 @@ export function vote(voteState, entry, voter) {
 
 export function restart(state) {
   state = state.remove('vote')
-    .remove('entries');
+    .remove('entries')
+    .remove('winner');
 
   state = setEntries(state, state.get('originalEntries'));
   return next(state);

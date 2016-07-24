@@ -17,7 +17,7 @@ export const Results = React.createClass({
     },
     render: function() {
         return this.props.winner ?
-            <Winner ref="winner" winner={this.props.winner} /> :
+            <Winner ref="winner" winner={this.props.winner} restart={this.props.restart}/> :
             <div className="results">
                 <div className="management">
                   <button ref="restart"

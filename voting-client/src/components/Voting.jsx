@@ -18,7 +18,7 @@ export const Voting = React.createClass({
     } else {
       return <div>
         { this.props.winner ?
-          <Winner ref="winner" winner={this.props.winner}/> : <Vote {...this.props} /> }
+          <Winner ref="winner" winner={this.props.winner} /> : <Vote {...this.props} /> }
       </div>;
     }
   }

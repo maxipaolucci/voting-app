@@ -67,6 +67,56 @@ describe('reducer', () => {
         }));
     });
 
+    it('handles SET_STATE with local initial state and a winner state comming from remote', () => {
+        const initialState = fromJS({
+            vote: {
+                pair: ['Trainspotting', '28 Days Later'],
+                tally: {Trainspotting: 1}
+            },
+            originalEntries: ['Trainspotting', '28 Days Later', 'Steve Jobs'],
+            entries: ['Steve Jobs']
+        })
+        const action = {
+            type: 'SET_STATE',
+            state: {
+                winner: 'Trainspotting',
+                originalEntries: ['Trainspotting', '28 Days Later', 'Steve Jobs']
+            }
+        };
+        const nextState = reducer(initialState, action);
+
+        expect(nextState).to.equal(fromJS({
+            winner: 'Trainspotting',
+            originalEntries: ['Trainspotting', '28 Days Later', 'Steve Jobs']
+        }));
+    });
+
+    it('handles SET_STATE when restarted after got a winner in the previous state', () => {
+        const initialState = fromJS({
+            winner: 'Trainspotting',
+            originalEntries: ['Trainspotting', '28 Days Later', 'Steve Jobs']
+        })
+        const action = {
+            type: 'SET_STATE',
+            state: {
+                vote: {
+                    pair: ['Trainspotting', '28 Days Later']
+                },
+                originalEntries: ['Trainspotting', '28 Days Later', 'Steve Jobs'],
+                entries: ['Steve Jobs']
+            }
+        };
+        const nextState = reducer(initialState, action);
+
+        expect(nextState).to.equal(fromJS({
+            vote: {
+                pair: ['Trainspotting', '28 Days Later']
+            },
+            originalEntries: ['Trainspotting', '28 Days Later', 'Steve Jobs'],
+            entries: ['Steve Jobs']
+        }));
+    });
+
     it('handles VOTE by returning the same state', () => {
         const state = fromJS({
             vote: {
